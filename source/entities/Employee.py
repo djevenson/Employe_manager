@@ -10,7 +10,6 @@ class Status(Enum):
     RETRAITE = "RETRAITE"
 
 
-
 @dataclass
 class Employee:
     firstName: str
