@@ -11,34 +11,6 @@ class Status(Enum):
 
 
 
-
-class Email:
-    def __init__(self, addresse:str):
-        if not "@" in addresse or "." not in addresse:
-            raise ValueError("Invalid addresse email!!! ")
-        self.email = addresse.strip()
-
-    def __str__(self):
-        return self.email
-
-
-
-
-class Money:
-    def __init__(self, amount:int, currency:Currency):
-        if amount < 0 :
-            return ValueError("Salary connot be negative")
-        if currency not in Currency:
-            raise ValueError("Currency unavailable")
-        self.amount=amount
-        self.currency=currency
-    
-    def __str__(self):
-        return f"{self.amount} {self.currency}"
-
-
-
-
 @dataclass
 class Employee:
     firstName: str
@@ -52,8 +24,14 @@ class Employee:
     salary: int
     status: Status = field(default=Status.ACTIVE)
 
-    def __post_init__(self):
-        pass
+    def __post_init__(self) -> None:
+        if self.salary < 0 :
+            raise ValueError("Salary connot be negative!!")
+
+        if "@" not in self.email() or "." not in self.email.strip():
+            raise ValueError("Email invalide!!")
+        self.email=self.email.strip()
+
 
     def licency(self) -> None :
         if self.status not in (Status.ACTIVE, Status.ON_LEAVE):
