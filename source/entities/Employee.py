@@ -1,44 +1,53 @@
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, timezone
 from enum import Enum
 
 
 class Status(Enum):
     ACTIVE = "ACTIVE"
     ON_LEAVE = "ON_LEAVE"
-    LICENCIE = "LICENCIE"
+    LAY_OFF = "LAY_OFF"
     RETRAITE = "RETRAITE"
 
+def _now() -> datetime:
+    return datetime.now(timezone.uct)
 
 @dataclass
 class Employee:
-    firstName: str
-    lastName: str
-    phone: str
+    name: str
     email: str
-    birthDay: date
-    hireDate: date
-    position: str
-    departement: str
+    hire_date: datetime = field(default=_now())
+    post: str
     salary: int
     status: Status = field(default=Status.ACTIVE)
 
-    def __post_init__(self) -> None:
-        if self.salary < 0 :
-            raise ValueError("Salary connot be negative!!")
+    def __post_init__(self):
+        pass
 
-        if "@" not in self.email() or "." not in self.email.strip():
-            raise ValueError("Email invalide!!")
-        self.email=self.email.strip()
+    def activate(self) ->None:
+        self.status = Status.ACTIVE
 
-
-    def licency(self) -> None :
-        if self.status not in (Status.ACTIVE, Status.ON_LEAVE):
-            raise ValueError(
-                f"Connot licency an employee who is {self.status}"
-            )
+    def on_leave(self) -> None:
+        self.status = status.ON_LEAVE
+        
+    def lay_off(self) -> None :
         self.status = Status.LICENCIE
-    
+
+    def retraite(self) -> None:
+        self.status = Status.RETRAITE
+
+    def raise_employe(self, amount:int) -> None:
+        self.salary += amount
+
+    def cut_pay(self, amount:int) -> None:
+        self.salary -= amount
+        
+    def validate_raise(self, amount:int) -> None:
+        return amount < 10
+
+    def validate_pay_cut(self, amount:int) -> bool:
+        return (self.salary - amount) < 100
+
     def is_active(self) -> bool :
         return self.status == Status.ACTIVE
     
