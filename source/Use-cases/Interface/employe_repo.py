@@ -2,7 +2,7 @@ from abc import ABC, abstracmethod
 from source.entities.Employee import Employee, Status
 from typing import List, Optional
 
-class employee(ABC):
+class EmployeeRepo(ABC):
 
     @abstracmethod
     def add_employee(self, employee: Employer) -> Employee:
