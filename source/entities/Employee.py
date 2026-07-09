@@ -56,7 +56,10 @@ class Employee:
     def cut_pay(self, amount:int) -> None:
         self.salary -= amount
         
-    def validate_raise(self, amount:int) -> None:
+    def change_post(self, new_post : str) -> None:
+        self.post = new_post
+
+    def validate_raise(self, amount:int) -> bool:
         return amount < 10
 
     def validate_pay_cut(self, amount:int) -> bool:
