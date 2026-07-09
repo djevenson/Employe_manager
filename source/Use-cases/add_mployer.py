@@ -1,19 +1,23 @@
 from source.entities.Employee import Employee
 from source.use_cases.Interface.employe_repo import EmployeRepo
+from dataclasses import dataclass
+from typing import Optional
 
 
+
+@dataclass
 class AddEmployerInput:
-    def __init__(self, name:str, email: str, salary:int, post:str):
-        self.name = name
-        self.email = email
-        self.salary = salary
-        self.post = post
+    name : str
+    email : str
+    salary : int
+    post : str
 
+
+@dataclass
 class AddEmployerOutput:
-    def __init__(self, employer: Employer, message = str, status=bool):
-        self.employer = employer
-        self.message = message
-        self.status = status
+    employer : Optional[Employee]
+    message : str
+    status : bool
 
 class AddEmployer:
     def __init__(self,repository: EmployeRepo) -> None:
@@ -22,11 +26,22 @@ class AddEmployer:
     def execute(self, input_data:AddEmployerInput) -> AddEmployerOutput:
         try:
             employee = Employee(
-                name = input_data.name, email = input_data.email, post = input_data.post,salary = input_data.salary
+                name = input_data.name, 
+                email = input_data.email, 
+                post = input_data.post,
+                salary = input_data.salary
             )
         except ValueError:
-            return AddEmployerOutput("Connot add Employer retcheck the informations", None, False)
+            return AddEmployerOutput(
+                message="Connot add Employer retcheck the informations", 
+                Employee=None, 
+                status=False
+                )
         employee = EmployerRepository.add_employee(employee)
-        return AddEmployerOutput("Employee added successfully", employee, True)
+        return AddEmployerOutput(
+            message="Employee added successfully", 
+            employee=employee, 
+            status=True
+        )
 
 

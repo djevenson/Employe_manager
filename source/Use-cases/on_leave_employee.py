@@ -39,4 +39,3 @@ class ActivateeEmployee:
             employee = employee, 
             status = True
             )
-

@@ -1,6 +1,10 @@
 from dataclasses import dataclass, field
-from datetime import date, timezone
+from datetime import date, timezone, datetime
 from enum import Enum
+
+
+class InvalideDAta(Exception):
+    pass
 
 
 class Status(Enum):
@@ -10,19 +14,29 @@ class Status(Enum):
     RETRAITE = "RETRAITE"
 
 def _now() -> datetime:
-    return datetime.now(timezone.uct)
+    return datetime.now(timezone.utc)
 
 @dataclass
 class Employee:
     name: str
     email: str
-    hire_date: datetime = field(default=_now())
     post: str
     salary: int
+    hire_date: datetime = field(default=_now())
     status: Status = field(default=Status.ACTIVE)
 
-    def __post_init__(self):
-        pass
+    def __post_init__(self) -> None:
+        if not self.name.strip():
+            raise InvalideDAta("Name connot be empty")
+        if not self.email.strip():
+            raise InvalideDAta("Email connot be empty") 
+        if not self.post.strip():
+            raise InvalideDAta("Post connot be empty")
+        if self.salary < 100 :
+            raise InvalideDAta("Salary connot be less than 100")
+        self.name = self.name.strip()
+        self.email = self.email.strip()
+        self.post = self.post.strip()
 
     def activate(self) ->None:
         self.status = Status.ACTIVE
@@ -59,8 +73,3 @@ class Employee:
     
     def is_retraite(self) -> bool :
         return self.status == Status.RETRAITE
-
-    
-
-    
-

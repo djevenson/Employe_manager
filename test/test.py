@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from source.entities.Employee import Employee
 @dataclass
 class Car:
     marque:str
@@ -23,3 +23,13 @@ class Voiture:
     
 ram = Voiture("Dodge", "Helcat TRX")
 print(ram.moteur)
+
+
+def add_ok():
+    try:
+        john = Employee(name="ok",email="nbjsf",salary=10,post="cs")
+    except Exception as e:
+        print(e)
+    
+
+add_ok()
