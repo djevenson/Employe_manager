@@ -14,17 +14,17 @@ class AddEmployerInput:
 
 
 @dataclass
-class AddEmployerOutput:
-    employer : Optional[Employee]
+class AddEmployeeOutput:
+    employee : Optional[Employee]
     message : str
     status : bool
+
 
 class AddEmployer:
     def __init__(self,repository: EmployeRepo) -> None:
         self.repository = repository
 
-    def execute(self, input_data:AddEmployerInput) -> AddEmployerOutput:
-        employee = None
+    def execute(self, input_data:AddEmployerInput) -> AddEmployeeOutput:
         try:
             employee = Employee(
                 name = input_data.name, 
@@ -32,11 +32,11 @@ class AddEmployer:
                 post = input_data.post,
                 salary = input_data.salary
             )
-        except ValueError:
+        except Exception as e:
             return AddEmployerOutput(
-                message="Connot add Employer retcheck the informations", 
-                Employee=None, 
-                status=False
+                message = str(e), 
+                Employee = None, 
+                status = False
                 )
         employee = self.repository.add_employee(employee)
         return AddEmployerOutput(
@@ -44,5 +44,3 @@ class AddEmployer:
             employee=employee, 
             status=True
         )
-
-
