@@ -13,7 +13,7 @@ class EmployeInput:
 
 @dataclass
 class EmployeeOutput:
-    message : str = ""
+    message : str 
     employee = Optional[Employee]
     status : bool
 
