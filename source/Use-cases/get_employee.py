@@ -13,9 +13,9 @@ class EmployeInput:
 
 @dataclass
 class EmployeeOutput:
-    message : str = ""
     employee : Optional[Employee]
     status : bool
+    message : str = ""
 
 
 class GetEmployee:
@@ -23,7 +23,7 @@ class GetEmployee:
         self.repository = repository
 
     def execute(self, input_data: EmployeInput) -> EmployeeOutput:
-        employee = self.repository.get_employee(informations.name)
+        employee = self.repository.get_employee(input_data.name)
         if not employee:
             return EmployeeOutput(
                 message="Employee not found",

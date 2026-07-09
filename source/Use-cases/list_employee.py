@@ -12,8 +12,8 @@ class ListInput:
 
 @dataclass
 class EmployeesOutput:
-    employees: List[Employee] = field(default_factory = List)
     total: int = 0
+    employees: List[Employee] = field(default_factory = List)
     def __post_init__(self) ->None:
         self.total = len(employees)
     
@@ -26,6 +26,6 @@ class ListEmployee:
         if list_input.status is not None:
             employees = self.repository.find_by_status(list_input.status)
         else:
-            employees = self.repository.find_all()
+            employees = self.repository.get_all()
         return EmployeeOutput(employees = employees)
         

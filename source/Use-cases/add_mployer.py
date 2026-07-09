@@ -24,6 +24,7 @@ class AddEmployer:
         self.repository = repository
 
     def execute(self, input_data:AddEmployerInput) -> AddEmployerOutput:
+        employee = None
         try:
             employee = Employee(
                 name = input_data.name, 
@@ -37,7 +38,7 @@ class AddEmployer:
                 Employee=None, 
                 status=False
                 )
-        employee = EmployerRepository.add_employee(employee)
+        employee = self.repository.add_employee(employee)
         return AddEmployerOutput(
             message="Employee added successfully", 
             employee=employee, 

@@ -37,7 +37,7 @@ class ActivateEmployee:
                 status = False
             )
         employee.activate()
-        employee = repository.update_employee(employee)
+        employee = self.repository.update_employee(employee)
         return EmployeeOutput(
             message = "Employee activated Successfully", 
             employee = employee, 

@@ -38,7 +38,7 @@ class PayCutEmployee:
                 status = False
             )
         employee.cut_pay()
-        employee = repository.update_employee(employee)
+        employee = self.repository.update_employee(employee)
         return EmployeeOutput(
             message = "Employee cuted-pay Successfully", 
             employee = employee, 

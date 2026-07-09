@@ -11,7 +11,7 @@ class Status(Enum):
     ACTIVE = "ACTIVE"
     ON_LEAVE = "ON_LEAVE"
     LAY_OFF = "LAY_OFF"
-    RETRAITE = "RETRAITE"
+    RETIRE = "RETIRE"
 
 def _now() -> datetime:
     return datetime.now(timezone.utc)
@@ -47,8 +47,8 @@ class Employee:
     def lay_off(self) -> None :
         self.status = Status.LICENCIE
 
-    def retraite(self) -> None:
-        self.status = Status.RETRAITE
+    def retire(self) -> None:
+        self.status = Status.RETIRE
 
     def raise_employe(self, amount:int) -> None:
         self.salary += amount
@@ -68,8 +68,8 @@ class Employee:
     def is_on_leave(self) -> bool :
         return self.status == Status.ON_LEAVE
 
-    def is_licencie(self) -> bool :
-        return self.status == Status.LICENCIE
+    def is_fire(self) -> bool :
+        return self.status == Status.LAY_OFF
     
-    def is_retraite(self) -> bool :
-        return self.status == Status.RETRAITE
+    def is_retire(self) -> bool :
+        return self.status == Status.RETIRE

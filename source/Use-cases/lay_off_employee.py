@@ -37,7 +37,7 @@ class LayOffEmployee:
                 status = False
             )
         employee.lay_off()
-        employee = repository.update_employee(employee)
+        employee = self.repository.update_employee(employee)
         return EmployeeOutput(
             message = "Employee layed-off Successfully", 
             employee = employee, 

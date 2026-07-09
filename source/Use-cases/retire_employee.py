@@ -18,7 +18,7 @@ class EmployeeOutput:
     status : bool
 
 
-class LayOffEmployee:
+class RetireEmployee:
     def __init__(self, repository:EmployeRepo) -> None:
         self.repository = repository
 
@@ -36,7 +36,7 @@ class LayOffEmployee:
                 employee = employee, 
                 status = False
             )
-        employee.retraite()
+        employee.retire()
         employee = repository.update_employee(employee)
         return EmployeeOutput(
             message = "Employee retraited Successfully", 

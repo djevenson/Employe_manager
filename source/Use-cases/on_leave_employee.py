@@ -33,7 +33,7 @@ class ActivateeEmployee:
                 status = False
             )
         employee.on_leave()
-        employee = repository.update_employee(employee)
+        employee = self.repository.update_employee(employee)
         return EmployeeOutput(
             message = "Employee on-leaved Successfully", 
             employee = employee, 

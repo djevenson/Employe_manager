@@ -32,7 +32,7 @@ class ActivateeEmployee:
                 status = False
             )
         employee.raise_employe()
-        employee = repository.update_employee(employee)
+        employee = self.repository.update_employee(employee)
         return EmployeeOutput(
             message = "Employee raised Successfully", 
             employee = employee, 
