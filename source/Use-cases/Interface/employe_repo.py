@@ -5,7 +5,7 @@ from typing import List, Optional
 class EmployeeRepo(ABC):
 
     @abstractmethod
-    def add_employee(self, employee: Employee) -> Employee:
+    def add_employee(self, employee: Employee) -> Optional[Employee]:
         ...
 
     @abstractmethod
@@ -21,5 +21,9 @@ class EmployeeRepo(ABC):
         ...
 
     @abstractmethod
-    def update_employee(self, employee : Employee) -> Employee:
+    def update_employee(self, name:str, status:Status) -> Optional[Employee]:
+        ...
+
+    @abstractmethod
+    def update_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
         ...

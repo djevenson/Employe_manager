@@ -27,7 +27,8 @@ print(ram.moteur)
 
 def add_ok():
     try:
-        john = Employee(name="ok",email="nbjsf",salary=10,post="cs")
+        john = Employee(name="ok",email="nbjsf",salary=1000,post="cs")
+        print(john.hire_date)
     except Exception as e:
         print(e)
     
