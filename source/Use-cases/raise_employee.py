@@ -19,7 +19,7 @@ class EmployeeOutput:
     status : bool
 
 
-class ActivateeEmployee:
+class RaiseEmployee:
     def __init__(self, repository:EmployeRepo) -> None:
         self.repository = repository
 
@@ -38,7 +38,7 @@ class ActivateeEmployee:
                 status = False
             )
         employee.raise_employe(data_input.amount)
-        employee = self.repository.update_employee(employee)
+        employee = self.repository.raise_employee_salary(employee.name, data_input.amount)
         return EmployeeOutput(
             message = "Employee raised Successfully", 
             employee = employee, 

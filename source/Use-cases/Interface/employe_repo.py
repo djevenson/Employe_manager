@@ -25,5 +25,11 @@ class EmployeeRepo(ABC):
         ...
 
     @abstractmethod
-    def update_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
+    def raise_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
         ...
+    
+    @abstractmethod
+    def cut_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
+        ...
+
+    
