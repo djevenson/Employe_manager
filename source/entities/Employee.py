@@ -22,7 +22,7 @@ class Employee:
     email: str
     post: str
     salary: int
-    hire_date: datetime = field(default=_now())
+    hire_date: datetime = field(default_factory=_now)
     status: Status = field(default=Status.ACTIVE)
 
     def __post_init__(self) -> None:
@@ -42,10 +42,10 @@ class Employee:
         self.status = Status.ACTIVE
 
     def on_leave(self) -> None:
-        self.status = status.ON_LEAVE
+        self.status = Status.ON_LEAVE
         
     def lay_off(self) -> None :
-        self.status = Status.LICENCIE
+        self.status = Status.LAY_OFF
 
     def retire(self) -> None:
         self.status = Status.RETIRE

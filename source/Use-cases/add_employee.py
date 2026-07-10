@@ -1,12 +1,12 @@
 from source.entities.Employee import Employee
-from source.use_cases.Interface.employe_repo import EmployeRepo
+from source.use_cases.Interface.employe_repo import EmployeeRepo
 from dataclasses import dataclass
 from typing import Optional
 
 
 
 @dataclass
-class AddEmployerInput:
+class AddEmployeeInput:
     name : str
     email : str
     salary : int
@@ -20,11 +20,11 @@ class AddEmployeeOutput:
     status : bool
 
 
-class AddEmployer:
-    def __init__(self,repository: EmployeRepo) -> None:
+class AddEmployee:
+    def __init__(self,repository: EmployeeRepo) -> None:
         self.repository = repository
 
-    def execute(self, input_data:AddEmployerInput) -> AddEmployeeOutput:
+    def execute(self, input_data:AddEmployeeInput) -> AddEmployeeOutput:
         try:
             employee = Employee(
                 name = input_data.name, 
@@ -33,13 +33,13 @@ class AddEmployer:
                 salary = input_data.salary
             )
         except Exception as e:
-            return AddEmployerOutput(
+            return AddEmployeeOutput(
                 message = str(e), 
-                Employee = None, 
+                employee = None, 
                 status = False
                 )
         employee = self.repository.add_employee(employee)
-        return AddEmployerOutput(
+        return AddEmployeeOutput(
             message="Employee added successfully", 
             employee=employee, 
             status=True

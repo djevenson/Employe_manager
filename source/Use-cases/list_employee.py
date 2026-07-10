@@ -1,5 +1,5 @@
 from source.entities.Employee import Employee, Status
-from source.use_cases.Interface.employe_repo import EmployeRepo
+from source.use_cases.Interface.employe_repo import EmployeeRepo
 from dataclasses import dataclass, field
 from typing import List, Optional
 
@@ -19,13 +19,13 @@ class EmployeesOutput:
     
 
 class ListEmployee:
-    def __init__(self, repository:EmployeRepo) -> None:
+    def __init__(self, repository:EmployeeRepo) -> None:
         self.repository = repository
 
-    def execute(self, list_input:ListInput) -> EmployeeOutput:
+    def execute(self, list_input:ListInput) -> EmployeesOutput:
         if list_input.status is not None:
-            employees = self.repository.find_by_status(list_input.status)
+            employees = self.repository.get_by_status(list_input.status)
         else:
             employees = self.repository.get_all()
-        return EmployeeOutput(employees = employees)
+        return EmployeesOutput(employees = employees)
         

@@ -1,25 +1,25 @@
-from abc import ABC, abstracmethod
+from abc import ABC, abstractmethod
 from source.entities.Employee import Employee, Status
 from typing import List, Optional
 
 class EmployeeRepo(ABC):
 
-    @abstracmethod
-    def add_employee(self, employee: Employer) -> Employee:
+    @abstractmethod
+    def add_employee(self, employee: Employee) -> Employee:
         ...
 
-    @abstracmethod
-    def get_employee(self, employee: Employer) -> Optional[Employee]:
+    @abstractmethod
+    def get_employee(self, name: str) -> Optional[Employee]:
         ...
 
-    @abstracmethod
+    @abstractmethod
     def get_by_status(self, status:Status) -> List[Employee]:
         ...
 
-    @abstracmethod
+    @abstractmethod
     def get_all(self) -> List[Employee]:
         ...
 
-    @abstracmethod
+    @abstractmethod
     def update_employee(self, employee : Employee) -> Employee:
         ...
