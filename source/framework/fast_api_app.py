@@ -4,7 +4,7 @@ from source.Interface-Adapter.controller.controller import EmployeeController
 from source.Interface-Adapter.repository.employee_repo import EmployeeRepo
 from source.entities.Employee import Status
 
-class EmployeeCreate(BaseModel):
+class AddEmployee(BaseModel):
     name: str
     email: str
     salary: int
@@ -24,7 +24,7 @@ def create_app(employee_repo: EmployeeRepo = None) -> FastAPI:
         return {"status": "great"}
 
     @app.post("/employees")
-    async def add_employee(employee: EmployeeCreate):
+    async def add_employee(employee: AddEmployee):
         result = controller.add_employee(employee.dict())
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
