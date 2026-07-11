@@ -5,7 +5,7 @@ from typing import  Optional
 
 
 @dataclass
-class EmployeeInput:
+class OnLeaveEmployeeInput:
     name : str
     def __post_init__(self):
         self.name = self.name.strip()
@@ -22,7 +22,7 @@ class OnLeaveEmployee:
     def __init__(self, repository:EmployeeRepo) -> None:
         self.repository = repository
 
-    def execute(self, data_input:EmployeeInput) -> EmployeeOutput:
+    def execute(self, data_input:OnLeaveEmployeeInput) -> EmployeeOutput:
         employee = self.repository.get_employee(data_input.name)
         if not employee:
             return EmployeeOutput(message = "Employee not found", employee = None, status = False)

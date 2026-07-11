@@ -18,6 +18,7 @@ def _now() -> datetime:
 
 @dataclass
 class Employee:
+    id: int = field(default=None)
     name: str
     email: str
     post: str

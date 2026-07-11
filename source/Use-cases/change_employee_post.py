@@ -5,7 +5,7 @@ from typing import  Optional
 
 
 @dataclass
-class EmployeInput:
+class ChangeEmployeePostInput:
     name : str
     new_post : str
     def __post_init__(self):
@@ -24,7 +24,7 @@ class ChangeEmployeePost:
     def __init__(self, repository:EmployeeRepo) -> None:
         self.repository = repository
 
-    def execute(self, data_input:EmployeeInput) -> EmployeeOutput:
+    def execute(self, data_input:ChangeEmployeePostInput) -> EmployeeOutput:
         employee = self.repository.get_employee(data_input.name)
         if not employee:
             return EmployeeOutput(

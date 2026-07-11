@@ -6,7 +6,7 @@ from typing import List, Optional
 
 
 @dataclass
-class ListInput:
+class ListEmployeesInput:
     status : Optional[Status] = None
 
 
@@ -18,14 +18,14 @@ class EmployeesOutput:
         self.total = len(employees)
     
 
-class ListEmployee:
+class ListEmployees:
     def __init__(self, repository:EmployeeRepo) -> None:
         self.repository = repository
 
-    def execute(self, list_input:ListInput) -> EmployeesOutput:
+    def execute(self, list_input:ListEmployeesInput) -> EmployeesOutput:
         if list_input.status is not None:
             employees = self.repository.get_by_status(list_input.status)
         else:
             employees = self.repository.get_all()
-        return EmployeesOutput(employees = employees)
-        
+        employees_sorted = sorted(employees, key=lambda e: e.created_at, reverse=True)
+        return EmployeesOutput(employees = employees_sorted)
