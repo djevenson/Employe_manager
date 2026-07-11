@@ -39,7 +39,7 @@ class EmployeeController:
         return {
             "success": True, 
             "employee": EmployeePresenter.to_dict(output_data.employee)
-            }
+        }
 
     def get_employee(self, name:str) -> Dict[str, Any]:
         if not name.strip():
@@ -48,7 +48,7 @@ class EmployeeController:
         return {
             "success": True, 
             "employee": EmployeePresenter.to_dict(output_data.employee)
-            }
+        }
 
     def list_employees(self, status: Optional[Status] = None) -> Dict[str, Any]:
         if status:
