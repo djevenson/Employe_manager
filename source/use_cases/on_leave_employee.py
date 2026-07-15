@@ -13,7 +13,7 @@ class OnLeaveEmployeeInput:
 
 @dataclass
 class EmployeeOutput:
-    message : str = ""
+    message : str 
     employee : Optional[Employee]
     status : bool
 
@@ -33,7 +33,7 @@ class OnLeaveEmployee:
                 status = False
             )
         employee.on_leave()
-        employee = self.repository.update_employee(employee)
+        employee = self.repository.update_employee(data_input.name, data_input.new_post)
         return EmployeeOutput(
             message = "Employee on-leaved Successfully", 
             employee = employee, 

@@ -14,13 +14,13 @@ class RaiseEmployeeInput:
 
 @dataclass
 class EmployeeOutput:
-    message : str = ""
     employee : Optional[Employee]
     status : bool
+    message : str = ""
 
 
 class RaiseEmployee:
-    def __init__(self, repository:EmployeRepo) -> None:
+    def __init__(self, repository:EmployeeRepo) -> None:
         self.repository = repository
 
     def execute(self, data_input:RaiseEmployeeInput) -> EmployeeOutput:
@@ -29,6 +29,12 @@ class RaiseEmployee:
             return EmployeeOutput(
                 message = "Employee not found",
                 employee = None, 
+                status = False
+            )
+        if not employee.validate_raise(data_input.amount):
+            return EmployeeOutput(
+                message = "Amount must be greater than 10", 
+                employee = employee, 
                 status = False
             )
         if not employee.is_active() or not employee.is_on_leave():

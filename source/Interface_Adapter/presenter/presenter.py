@@ -1,4 +1,4 @@
-from source.entities.Employee import Employee, 
+from source.entities.Employee import Employee
 from datetime import datetime, timezone
 from typing import List, Any, Dict
 

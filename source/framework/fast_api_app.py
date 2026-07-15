@@ -1,8 +1,15 @@
+import os
 from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
-from source.Interface-Adapter.controller.controller import EmployeeController
-from source.Interface-Adapter.repository.employee_repo import EmployeeRepo
+from dotenv import load_dotenv
+from source.Interface_Adapter.controller.controller import EmployeeController
+from source.Interface_Adapter.repository.repository import PosgreSQLEmployeeRepo
 from source.entities.Employee import Status
+from typing import Optional
+
+
+load_dotenv()
+
 
 class AddEmployee(BaseModel):
     name: str
@@ -11,13 +18,52 @@ class AddEmployee(BaseModel):
     post: str
 
 
-def create_app(employee_repo: EmployeeRepo = None) -> FastAPI:
+def _build_db_connection_string() -> str:
+    """
+    Construit la chaîne de connexion PostgreSQL à partir des variables
+    d'environnement, plutôt que d'avoir des identifiants en dur dans le code.
+
+    Variables attendues : DB_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_PORT
+    Voir le fichier .env.example pour la liste complète.
+    """
+    db_name = os.getenv("DB_NAME")
+    db_user = os.getenv("DB_USER")
+    db_password = os.getenv("DB_PASSWORD")
+    db_host = os.getenv("DB_HOST", "localhost")
+    db_port = os.getenv("DB_PORT", "5432")
+
+    missing = [
+        var_name
+        for var_name, value in [
+            ("DB_NAME", db_name),
+            ("DB_USER", db_user),
+            ("DB_PASSWORD", db_password),
+        ]
+        if not value
+    ]
+    if missing:
+        raise RuntimeError(
+            "Variables d'environnement manquantes pour la connexion à la base de "
+            f"données : {', '.join(missing)}. "
+            "Créez un fichier .env à partir de .env.example, ou définissez-les "
+            "directement dans l'environnement."
+        )
+
+    return (
+        f"dbname={db_name} user={db_user} password={db_password} "
+        f"host={db_host} port={db_port}"
+    )
+
+
+def create_app(employee_repo: Optional[PosgreSQLEmployeeRepo] = None) -> FastAPI:
     app = FastAPI()
     if employee_repo is None:
-        employee_repo = PosgreSQLEmployeeRepo("dbname=employees user=postgres password=secret")  # Initialize with a default repository if none is provided
-    
-    controller = EmployeeController(employee_repo)
+        # Les identifiants sont maintenant lus depuis l'environnement,
+        # plus jamais codés en dur dans le code source.
+        connection_string = _build_db_connection_string()
+        employee_repo = PosgreSQLEmployeeRepo(connection_string)
 
+    controller = EmployeeController(employee_repo)
 
     @app.get("/health")
     async def health_check():
@@ -50,7 +96,7 @@ def create_app(employee_repo: EmployeeRepo = None) -> FastAPI:
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result
-    
+
     @app.put("/employees/{name}/salary")
     async def raise_employee_salary(name: str, amount: int):
         result = controller.raise_employee_salary(name, amount)
@@ -85,7 +131,7 @@ def create_app(employee_repo: EmployeeRepo = None) -> FastAPI:
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result
-    
+
     @app.put("/employees/{name}/retire")
     async def retire_employee(name: str):
         result = controller.retire_employee(name)

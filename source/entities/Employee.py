@@ -18,11 +18,11 @@ def _now() -> datetime:
 
 @dataclass
 class Employee:
-    id: int = field(default=None)
     name: str
     email: str
     post: str
     salary: int
+    id: int = field(default=None)
     hire_date: datetime = field(default_factory=_now)
     status: Status = field(default=Status.ACTIVE)
 

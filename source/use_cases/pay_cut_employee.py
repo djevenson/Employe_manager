@@ -14,13 +14,13 @@ class PayCutEmployeeInput:
 
 @dataclass
 class EmployeeOutput:
-    message : str = ""
+    message : str
     employee : Optional[Employee]
     status : bool
 
 
 class PayCutEmployee:
-    def __init__(self, repository:EmployeRepo) -> None:
+    def __init__(self, repository:EmployeeRepo) -> None:
         self.repository = repository
 
     def execute(self, data_input:PayCutEmployeeInput) -> EmployeeOutput:

@@ -88,9 +88,9 @@ class PosgreSQLEmployeeRepo(EmployeeRepo):
                     SET salary = salary+%s 
                     WHERE name=%s RETURNING *""",
                 (amount, name) 
-            )
-            employee = cursor.fetchone()
-            connection.commit()    
+                )
+                employee = cursor.fetchone()
+                connection.commit()    
         return self._from_row(employee) if employee else None
 
     def cut_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
@@ -106,7 +106,7 @@ class PosgreSQLEmployeeRepo(EmployeeRepo):
                 connection.commit()
         return self._from_row(employee) if employee else None
 
-    def _db_connect(self) -> connection:
+    def _db_connect(self) :# -> connection
         connection = psycopg2.connect(self.db_path)
         return connection
     

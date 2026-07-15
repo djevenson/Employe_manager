@@ -12,10 +12,10 @@ class ListEmployeesInput:
 
 @dataclass
 class EmployeesOutput:
-    total: int = 0
     employees: List[Employee] = field(default_factory = list)
+    total: int = 0
     def __post_init__(self) ->None:
-        self.total = len(employees)
+        self.total = len(self.employees)
     
 
 class ListEmployees:
@@ -27,5 +27,5 @@ class ListEmployees:
             employees = self.repository.get_by_status(list_input.status)
         else:
             employees = self.repository.get_all()
-        employees_sorted = sorted(employees, key=lambda e: e.created_at, reverse=True)
+        employees_sorted = sorted(employees, key=lambda e: e.hire_date, reverse=True)
         return EmployeesOutput(employees = employees_sorted)                

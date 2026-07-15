@@ -5,7 +5,7 @@ from typing import  Optional
 
 
 @dataclass
-class LayOffEmployeeInput:
+class RetireEmployeeInput:
     name : str
     def __post_init__(self):
         self.name = self.name.strip()
@@ -13,33 +13,33 @@ class LayOffEmployeeInput:
 
 @dataclass
 class EmployeeOutput:
-    message : str = ""
+    message : str 
     employee : Optional[Employee]
     status : bool
 
 
-class LayOffEmployee:
+class RetireEmployee:
     def __init__(self, repository:EmployeeRepo) -> None:
         self.repository = repository
 
-    def execute(self, data_input:LayOffEmployeeInput) -> EmployeeOutput:
+    def execute(self, data_input:RetireEmployeeInput) -> EmployeeOutput:
         employee = self.repository.get_employee(data_input.name)
         if not employee:
             return EmployeeOutput(
                 message = "Employee not found",
                 employee = None, 
-                status = False
+                status =False
             )
         if not employee.is_active() or not employee.is_on_leave():
             return EmployeeOutput(
-                message = f"Connot lay-off an employee who is {employee.status}", 
+                message = f"Connot retraite an employee who is {employee.status}", 
                 employee = employee, 
                 status = False
             )
-        employee.lay_off()
-        employee = self.repository.update_employee(employee)
+        employee.retire()
+        employee = self.repository.update_employee(employee.name, data_input.new_post)
         return EmployeeOutput(
-            message = "Employee layed-off Successfully", 
+            message = "Employee retraited Successfully", 
             employee = employee, 
             status = True
         )
