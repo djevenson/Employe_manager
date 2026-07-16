@@ -30,12 +30,12 @@ class RetireEmployee:
             )
         if not employee.is_active() or not employee.is_on_leave():
             return EmployeeOutput(
-                message = f"Connot retraite an employee who is {employee.status}", 
+                message = f"Connot retraite an employee who is {employee.status.value}", 
                 employee = employee, 
                 status = False
             )
         employee.retire()
-        employee = self.repository.update_employee(data_input.id, data_input.new_post)
+        employee = self.repository.update_employee(data_input.id, employee.status)
         return EmployeeOutput(
             message = "Employee retraited Successfully", 
             employee = employee, 

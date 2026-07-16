@@ -32,7 +32,7 @@ class PayCutEmployee:
             )
         if not employee.is_active() or not employee.is_on_leave():
             return EmployeeOutput(
-                message = f"Connot cut-pay an employee who is {employee.status}", 
+                message = f"Connot cut-pay an employee who is {employee.status.value}", 
                 employee = employee, 
                 status = False
             )

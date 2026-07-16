@@ -27,7 +27,7 @@ class OnLeaveEmployee:
             return EmployeeOutput(message = "Employee not found", employee = None, status = False)
         if not employee.is_active():
             return EmployeeOutput(
-                message = f"Cannot on-leave an employee who is {employee.status}", 
+                message = f"Cannot on-leave an employee who is {employee.status.value}", 
                 employee = employee, 
                 status = False
             )

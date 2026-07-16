@@ -27,14 +27,14 @@ class LayOffEmployee:
                 employee = None, 
                 status = False
             )
-        if not employee.is_active() or not employee.is_on_leave():
+        if employee.is_laid_off() or employee.is_retired():
             return EmployeeOutput(
-                message = f"Connot lay-off an employee who is {employee.status}", 
+                message = f"Connot lay-off an employee who is {employee.status.value}", 
                 employee = employee, 
                 status = False
             )
         employee.lay_off()
-        employee = self.repository.update_employee(employee.name, data_input.new_post)
+        employee = self.repository.update_employee(data_input.id, employee.status)
         return EmployeeOutput(
             message = "Employee layed-off Successfully", 
             employee = employee, 

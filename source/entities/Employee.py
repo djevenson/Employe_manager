@@ -72,8 +72,8 @@ class Employee:
     def is_on_leave(self) -> bool :
         return self.status == Status.ON_LEAVE
 
-    def is_fire(self) -> bool :
+    def is_laid_off(self) -> bool :
         return self.status == Status.LAY_OFF
     
-    def is_retire(self) -> bool :
+    def is_retired(self) -> bool :
         return self.status == Status.RETIRE
