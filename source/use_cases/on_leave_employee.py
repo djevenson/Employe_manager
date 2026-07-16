@@ -6,10 +6,9 @@ from typing import  Optional
 
 @dataclass
 class OnLeaveEmployeeInput:
-    name : str
-    def __post_init__(self):
-        self.name = self.name.strip()
-
+    id:int
+    
+    
 
 @dataclass
 class EmployeeOutput:
@@ -23,17 +22,17 @@ class OnLeaveEmployee:
         self.repository = repository
 
     def execute(self, data_input:OnLeaveEmployeeInput) -> EmployeeOutput:
-        employee = self.repository.get_employee(data_input.name)
-        if not employee:
+        employee = self.repository.get_employee(data_input.id)
+        if employee is None:
             return EmployeeOutput(message = "Employee not found", employee = None, status = False)
-        if not employee.is_active() or not employee.is_on_leave():
+        if not employee.is_active():
             return EmployeeOutput(
-                message = f"Connot on-leave an employee who is {employee.status}", 
+                message = f"Cannot on-leave an employee who is {employee.status}", 
                 employee = employee, 
                 status = False
             )
         employee.on_leave()
-        employee = self.repository.update_employee(data_input.name, data_input.new_post)
+        employee = self.repository.update_employee(data_input.id, employee.status)
         return EmployeeOutput(
             message = "Employee on-leaved Successfully", 
             employee = employee, 

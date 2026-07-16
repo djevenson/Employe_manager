@@ -6,10 +6,9 @@ from typing import  Optional
 
 @dataclass
 class PayCutEmployeeInput:
-    name : str
+    id:int
     amount : int
-    def __post_init__(self):
-        self.name = self.name.strip()
+    
 
 
 @dataclass
@@ -24,7 +23,7 @@ class PayCutEmployee:
         self.repository = repository
 
     def execute(self, data_input:PayCutEmployeeInput) -> EmployeeOutput:
-        employee = self.repository.get_employee(data_input.name)
+        employee = self.repository.get_employee(data_input.id)
         if not employee:
             return EmployeeOutput(
                 message = "Employee not found",

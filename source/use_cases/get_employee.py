@@ -6,9 +6,7 @@ from typing import Optional
 
 @dataclass
 class GetEmployeeInput:
-    name: str
-    def __post_init__(self):
-        self.name = self.name.strip()
+    id: int
 
 
 @dataclass
@@ -23,11 +21,12 @@ class GetEmployee:
         self.repository = repository
 
     def execute(self, input_data: GetEmployeeInput) -> EmployeeOutput:
-        employee = self.repository.get_employee(input_data.name)
-        if not employee:
+        employee = self.repository.get_employee(input_data.id)
+        if employee is None:
             return EmployeeOutput(
                 message="Employee not found",
                 employee = None,
                 status = False
             )
-        return EmployeeOutput(employee = employee, status = True)
+        else:
+            return EmployeeOutput(employee = employee, status = True)

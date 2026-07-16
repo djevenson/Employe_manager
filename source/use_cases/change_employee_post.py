@@ -6,12 +6,9 @@ from typing import  Optional
 
 @dataclass
 class ChangeEmployeePostInput:
-    name : str
+    id : str
     new_post : str
-    def __post_init__(self):
-        self.name = self.name.strip()
-        self.new_post = self.new_post.strip()
-
+    
 
 @dataclass
 class EmployeeOutput:
@@ -25,8 +22,8 @@ class ChangeEmployeePost:
         self.repository = repository
 
     def execute(self, data_input:ChangeEmployeePostInput) -> EmployeeOutput:
-        employee = self.repository.get_employee(data_input.name)
-        if not employee:
+        employee = self.repository.get_employee(data_input.id)
+        if employee is None:
             return EmployeeOutput(
                 message = "Employee not found",
                 employee = None, 
@@ -45,7 +42,7 @@ class ChangeEmployeePost:
                 status =False
             )
         employee.change_post(data_input.new_post)
-        employee = self.repository.update_employee(employee.name, data_input.new_post)
+        employee = self.repository.change_employee_post(data_input.id, employee.post)
         return EmployeeOutput(
             message = "Post changed Successfully", 
             employee = employee, 

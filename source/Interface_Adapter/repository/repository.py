@@ -40,11 +40,11 @@ class PosgreSQLEmployeeRepo(EmployeeRepo):
                 connection.commit()
         return self._from_row(employee) if employee else None
 
-    def get_employee(self, name: str) -> Optional[Employee]:
+    def get_employee(self, id: int) -> Optional[Employee]:
         with self._db_connect() as connection:
             with connection.cursor() as cursor:
                 cursor.execute(
-                    """SELECT * FROM employees WHERE name=%s """,(name,)
+                    """SELECT * FROM employees WHERE id=%s """,(id,)
                 )
                 employee = cursor.fetchone()
         return self._from_row(employee) if employee else None
@@ -66,15 +66,41 @@ class PosgreSQLEmployeeRepo(EmployeeRepo):
                 )
                 employees = cursor.fetchall()
         return [self._from_row(e) for  e in employees] if employees else []
-
-    def update_employee(self, name:str, status:Status) -> Optional[Employee]:
+    
+    def update_post(self, name:str, post:str) -> Optional[Employee]:
         with self._db_connect() as connection:
             with connection.cursor() as cursor:
                 cursor.execute(
                     """UPDATE employees 
-                    SET status=%s WHERE name=%s 
+                    SET post=%s WHERE name=%s 
                     RETURNING *""", 
-                    (status.value, name)
+                    (post, name)
+                )
+                employee = cursor.fetchone()
+                cursor.commit()
+        return self._from_row(employee) if employee else None
+
+    def change_employee_post(self, id:int, post:str) -> Optional[Employee]:
+        with self._db_connect() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """UPDATE employees 
+                    SET post=%s WHERE id=%s 
+                    RETURNING *""", 
+                    (post, id)
+                )
+                employee = cursor.fetchone()
+                connection.commit()
+        return self._from_row(employee) if employee else None           
+
+    def update_employee(self, id:int, status:Status) -> Optional[Employee]:
+        with self._db_connect() as connection:
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    """UPDATE employees 
+                    SET status=%s WHERE id=%s 
+                    RETURNING *""", 
+                    (status.value, id)
                 ) 
                 employee = cursor.fetchone()
                 connection.commit()

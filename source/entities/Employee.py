@@ -61,7 +61,7 @@ class Employee:
         self.post = new_post
 
     def validate_raise(self, amount:int) -> bool:
-        return amount < 10
+        return amount > 10
 
     def validate_pay_cut(self, amount:int) -> bool:
         return (self.salary - amount) < 100

@@ -14,7 +14,7 @@ from source.use_cases.pay_cut_employee import PayCutEmployee, PayCutEmployeeInpu
 from source.use_cases.raise_employee import RaiseEmployee, RaiseEmployeeInput
 from source.use_cases.retire_employee import RetireEmployee, RetireEmployeeInput
 
-
+ 
 
 class EmployeeController:
 
@@ -30,28 +30,27 @@ class EmployeeController:
         self.raise_employee_ok = RaiseEmployee(employee_repo)
         self.retire_employee_ok = RetireEmployee(employee_repo)
 
-    def add_employee(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
-        name = input_data.get("name")
-        email = input_data.get("email")
-        salary = input_data.get("salary")
-        post = input_data.get("post")
-        if not name or not email or not salary or not post:
-            return {"success": False, "error": "Name, email, salary, and post are required fields."}
+    def add_employee(self, name:str, email:str, salary:str, post:str) -> Dict[str, Any]:
         output_data = self.add_employee_ok.execute(AddEmployeeInput(name=name, email=email, salary=salary, post=post))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message}
         return {
-            "success": True, 
+            "success": output_data.status, 
+            "message":output_data.message,
             "employee": EmployeePresenter.to_dict(output_data.employee)
         }
 
-    def get_employee(self, name:str) -> Dict[str, Any]:
-        if not name.strip():
-            return {"success": False, "error": "Name is a required field."}
-        output_data = self.get_employee_ok.execute(GetEmployeeInput(name=name))
-        return {
-            "success": True, 
-            "employee": EmployeePresenter.to_dict(output_data.employee)
-        }
-
+    def get_employee(self, id:int) -> Dict[str, Any]:
+        output_data = self.get_employee_ok.execute(GetEmployeeInput(id=id))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message}
+        else:
+            return {
+                "success": output_data.status, 
+                "message":output_data.message,
+                "employee": EmployeePresenter.to_dict(output_data.employee)
+            }
+ 
     def list_employees(self, status: Optional[Status] = None) -> Dict[str, Any]:
         if status:
             try:
@@ -66,68 +65,75 @@ class EmployeeController:
             "total": output_data.total
         }
 
-    def activate_employee(self, name: str) -> Dict[str, Any]:
-        if not name.strip():
-            return {"success": False, "error": "Name is a required field."}
-        output_data = self.activate_employee_ok.execute(ActivateEmployeeInput(name=name))
-        return {
-            "success": True, 
-            "employee": EmployeePresenter.to_dict(output_data.employee)
-        }
+    def activate_employee(self, id: int) -> Dict[str, Any]:
+        output_data = self.activate_employee_ok.execute(ActivateEmployeeInput(id=id))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message}
         
-
-    def lay_off_employee(self, name: str) -> Dict[str, Any]:
-        if not name.strip():
-            return {"success": False, "error": "Name is a required field."}
-        output_data = self.lay_off_employee_ok.execute(LayOffEmployeeInput(name=name))
         return {
-            "success": True, 
+            "success": output_data.status, 
+            "message": output_data.message,
             "employee": EmployeePresenter.to_dict(output_data.employee)
         }
 
-    def on_leave_employee(self, name: str) -> Dict[str, Any]:
-        if not name.strip():
-            return {"success": False, "error": "Name is a required field."}
-        output_data = self.on_leave_employee_ok.execute(OnLeaveEmployeeInput(name=name))
+    def on_leave_employee(self, id: int) -> Dict[str, Any]:
+        output_data = self.on_leave_employee_ok.execute(OnLeaveEmployeeInput(id=id))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message }
         return {
-            "success": True, 
+            "success": output_data.status, 
+            "message":output_data.message,
+            "employee": EmployeePresenter.to_dict(output_data.employee)
+        }   
+
+    def lay_off_employee(self, id: int) -> Dict[str, Any]:
+        output_data = self.lay_off_employee_ok.execute(LayOffEmployeeInput(id=id))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message}
+        return {
+            "success": output_data.status, 
+            "message":output_data.message,
             "employee": EmployeePresenter.to_dict(output_data.employee)
         }
 
-    def pay_cut_employee(self, name: str, amount: int) -> Dict[str, Any]:
-        if not name.strip():
-            return {"success": False, "error": "Name is a required field."}
-        output_data = self.pay_cut_employee_ok.execute(PayCutEmployeeInput(name=name, amount=amount))
+    def retire_employee(self, id: int) -> Dict[str, Any]:
+        output_data = self.retire_employee_ok.execute(RetireEmployeeInput(id=id))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message}
         return {
-            "success": True, 
+            "success": output_data.status,
+            "message":output_data.message, 
             "employee": EmployeePresenter.to_dict(output_data.employee)
         }
 
-    def raise_employee(self, name: str) -> Dict[str, Any]:
-        if not name.strip():
-            return {"success": False, "error": "Name is a required field."}
-        output_data = self.raise_employee_ok.execute(RaiseEmployeeInput(name=name))
+    def pay_cut_employee(self, id:int, amount: int) -> Dict[str, Any]:
+        output_data = self.pay_cut_employee_ok.execute(PayCutEmployeeInput(id=id, amount=amount))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message}
         return {
-            "success": True, 
+            "success": True,
+            "message":output_data.message, 
+            "employee": EmployeePresenter.to_dict(output_data.employee)
+        }
+    
+    def raise_employee(self, id: int, amount:int) -> Dict[str, Any]:
+        output_data = self.raise_employee_ok.execute(RaiseEmployeeInput(id=id, amount=amount))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message}
+        return {
+            "success": output_data.status, 
+            "message":output_data.message,
             "employee": EmployeePresenter.to_dict(output_data.employee)
         }
 
-    def retire_employee(self, name: str) -> Dict[str, Any]:
-        if not name.strip():
-            return {"success": False, "error": "Name is a required field."}
-        output_data = self.retire_employee_ok.execute(RetireEmployeeInput(name=name))
-        return {
-            "success": True, 
-            "employee": EmployeePresenter.to_dict(output_data.employee)
-        }
+    
 
-    def change_employee_post(self, name: str, new_post: str) -> Dict[str, Any]:
-        if not name.strip():
-            return {"success": False, "error": "Name is a required field."}
-        if not new_post.strip():
-            return {"success": False, "error": "New post is a required field."}
-        output_data = self.change_employee_post_ok.execute(ChangeEmployeePostInput(name=name, new_post=new_post))
+    def change_employee_post(self, id:int, new_post: str) -> Dict[str, Any]:
+        output_data = self.change_employee_post_ok.execute(ChangeEmployeePostInput(id=id, new_post=new_post))
+        if not output_data.status:
+            return {"success": False, "error": output_data.message}
         return {
-            "success": True, 
+            "success": output_data.status, 
+            "message":output_data.message,
             "employee": EmployeePresenter.to_dict(output_data.employee)
         }

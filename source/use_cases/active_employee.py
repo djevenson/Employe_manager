@@ -6,9 +6,7 @@ from typing import Optional
 
 @dataclass
 class ActivateEmployeeInput:
-    name : str
-    def __post_init__(self):
-        self.name = self.name.strip()
+    id:int
 
 
 @dataclass
@@ -23,8 +21,8 @@ class ActivateEmployee:
         self.repository = repository
 
     def execute(self, data_input:ActivateEmployeeInput) -> EmployeeOutput:
-        employee = self.repository.get_employee(data_input.name)
-        if not employee:
+        employee = self.repository.get_employee(data_input.id)
+        if employee is None:
             return EmployeeOutput(
                 message = "Employee not found",
                 employee = None, 
@@ -37,7 +35,7 @@ class ActivateEmployee:
                 status = False
             )
         employee.activate()
-        employee = self.repository.update_employee(employee)
+        employee = self.repository.update_employee(data_input.id, employee.status)
         return EmployeeOutput(
             message = "Employee activated Successfully", 
             employee = employee, 

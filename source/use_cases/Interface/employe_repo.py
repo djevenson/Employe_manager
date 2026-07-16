@@ -9,7 +9,7 @@ class EmployeeRepo(ABC):
         ...
 
     @abstractmethod
-    def get_employee(self, name: str) -> Optional[Employee]:
+    def get_employee(self, id: int) -> Optional[Employee]:
         ...
 
     @abstractmethod
@@ -21,15 +21,19 @@ class EmployeeRepo(ABC):
         ...
 
     @abstractmethod
-    def update_employee(self, name:str, status:Status) -> Optional[Employee]:
+    def update_employee(self, id:int, status:Status) -> Optional[Employee]:
         ...
 
     @abstractmethod
-    def raise_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
+    def change_employee_post(self, id:int, post:str) -> Optional[Employee]:
+        ...
+
+    @abstractmethod
+    def raise_employee_salary(self, id:int, amount:int) -> Optional[Employee]:
         ...
     
     @abstractmethod
-    def cut_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
+    def cut_employee_salary(self, id:int, amount:int) -> Optional[Employee]:
         ...
 
     

@@ -56,10 +56,12 @@ def _build_db_connection_string() -> str:
 
 
 def create_app(employee_repo: Optional[PosgreSQLEmployeeRepo] = None) -> FastAPI:
-    app = FastAPI()
+    app = FastAPI(
+        title="Employee Manager API",
+        description="API REST pour la gestion des employés, construite selon l'architecture propre.",
+        version="2.3.1",
+    )
     if employee_repo is None:
-        # Les identifiants sont maintenant lus depuis l'environnement,
-        # plus jamais codés en dur dans le code source.
         connection_string = _build_db_connection_string()
         employee_repo = PosgreSQLEmployeeRepo(connection_string)
 
@@ -70,17 +72,17 @@ def create_app(employee_repo: Optional[PosgreSQLEmployeeRepo] = None) -> FastAPI
         return {"status": "great"}
 
     @app.post("/employees")
-    async def add_employee(employee: AddEmployee):
-        result = controller.add_employee(employee.dict())
+    async def add_employee(name:str, email:str, salary:int, post:str):
+        result = controller.add_employee(name, email, salary, post)
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result
 
-    @app.get("/employees/{name}")
-    async def get_employee(name: str):
-        result = controller.get_employee(name)
+    @app.get("/employees/{id}")
+    async def get_employee(id: int):
+        result = controller.get_employee(id)
         if not result["success"]:
-            raise HTTPException(status_code=400, detail=result["error"])
+            raise HTTPException(status_code=404, detail=result["error"])
         return result
 
     @app.get("/employees")
@@ -89,52 +91,52 @@ def create_app(employee_repo: Optional[PosgreSQLEmployeeRepo] = None) -> FastAPI
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result
-
-    @app.put("/employees/{name}/status")
-    async def update_employee_status(name: str, status: Status):
-        result = controller.update_employee(name, status)
+    
+    @app.put("/employees/{id}/activate")
+    async def activate_employee(id: int):
+        result = controller.activate_employee(id)
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+        return result
+    
+    @app.put("/employees/{id}/onleave")
+    async def on_leave_employee(id: int):
+        result = controller.on_leave_employee(id)
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result
 
-    @app.put("/employees/{name}/salary")
-    async def raise_employee_salary(name: str, amount: int):
-        result = controller.raise_employee_salary(name, amount)
+    @app.put("/employees/{id}/layoff")
+    async def lay_off_employee(id: int):
+        result = controller.lay_off_employee(id)
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result
 
-    @app.put("/employees/{name}/post")
-    async def change_employee_post(name: str, post: str):
-        result = controller.change_employee_post(name, post)
+    @app.put("/employees/{id}/retire")
+    async def retire_employee(id: int):
+        result = controller.retire_employee(id)
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result
 
-    @app.put("/employees/{name}/activate")
-    async def activate_employee(name: str):
-        result = controller.activate_employee(name)
+    @app.put("/employees/{id}/salary")
+    async def raise_employee_salary(id: int, amount: int):
+        result = controller.raise_employee(id, amount)
+        if not result["success"]:
+            raise HTTPException(status_code=400, detail=result["error"])
+        return result
+    
+    @app.put("/employees/{id}/salary-cut")
+    async def pay_cut_employee(id: int, amount: int):
+        result = controller.pay_cut_employee(id, amount)
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result
 
-    @app.put("/employees/{name}/layoff")
-    async def lay_off_employee(name: str):
-        result = controller.lay_off_employee(name)
-        if not result["success"]:
-            raise HTTPException(status_code=400, detail=result["error"])
-        return result
-
-    @app.put("/employees/{name}/onleave")
-    async def on_leave_employee(name: str):
-        result = controller.on_leave_employee(name)
-        if not result["success"]:
-            raise HTTPException(status_code=400, detail=result["error"])
-        return result
-
-    @app.put("/employees/{name}/retire")
-    async def retire_employee(name: str):
-        result = controller.retire_employee(name)
+    @app.put("/employees/{id}/post")
+    async def change_employee_post(id: int, post: str):
+        result = controller.change_employee_post(id, post)
         if not result["success"]:
             raise HTTPException(status_code=400, detail=result["error"])
         return result

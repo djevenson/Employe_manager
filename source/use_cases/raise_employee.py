@@ -6,10 +6,8 @@ from typing import  Optional
 
 @dataclass
 class RaiseEmployeeInput:
-    name : str
+    id:int
     amount : int
-    def __post_init__(self):
-        self.name = self.name.strip()
 
 
 @dataclass
@@ -24,8 +22,8 @@ class RaiseEmployee:
         self.repository = repository
 
     def execute(self, data_input:RaiseEmployeeInput) -> EmployeeOutput:
-        employee = self.repository.get_employee(data_input.name)
-        if not employee:
+        employee = self.repository.get_employee(data_input.id)
+        if employee is None:
             return EmployeeOutput(
                 message = "Employee not found",
                 employee = None, 
