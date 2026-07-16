@@ -2,7 +2,9 @@
 It's a pet project for managing employees in a company. It is built with Clean architecture pattern.
 
 ### Features
-- Add, update, delete and view employees
+- Add employees,
+- update employee information,
+- view employees
 
 ### Installation
 1. Clone the repository
