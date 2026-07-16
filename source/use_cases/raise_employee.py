@@ -35,9 +35,9 @@ class RaiseEmployee:
                 employee = employee, 
                 status = False
             )
-        if not employee.is_active() or not employee.is_on_leave():
+        if employee.is_laid_off() or employee.is_retired():
             return EmployeeOutput(
-                message = f"Connot raise an employee who is {employee.status.value}", 
+                message = f"Cannot raise an employee who is {employee.status.value}", 
                 employee = employee, 
                 status = False
             )

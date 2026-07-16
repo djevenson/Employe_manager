@@ -30,22 +30,22 @@ class PayCutEmployee:
                 employee = None, 
                 status = False
             )
-        if not employee.is_active() or not employee.is_on_leave():
+        if employee.is_laid_off() or employee.is_retired():
             return EmployeeOutput(
-                message = f"Connot cut-pay an employee who is {employee.status.value}", 
+                message = f"Cannot cut-pay an employee who is {employee.status.value}", 
                 employee = employee, 
                 status = False
             )
         if not employee.validate_pay_cut(data_input.amount):
             return EmployeeOutput(
-                message = f"Connot salary to small to cut {data_input.amount} ", 
+                message = f"Cannot cut salary by {data_input.amount} ", 
                 employee = employee, 
                 status = False
             )
         employee.cut_pay(data_input.amount)
         employee = self.repository.cut_employee_salary(employee.name, data_input.amount)
         return EmployeeOutput(
-            message = "Employee cuted-pay Successfully", 
+            message = "Employee cutted-pay Successfully", 
             employee = employee, 
             status = True
             )
