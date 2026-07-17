@@ -52,21 +52,21 @@ class Employee:
         self.status = Status.RETIRE
 
     def raise_employe(self, amount:int) -> None:
-        self.salary += amount
+        self.salary = (self.salary + amount)
 
     def cut_pay(self, amount:int) -> None:
-        self.salary -= amount
+        self.salary = (self.salary - amount)
         
     def change_post(self, new_post : str) -> None:
         self.post = new_post
 
     def validate_raise(self, amount:int) -> bool:
-        return amount > 10
+        return amount >= 10
 
     def validate_pay_cut(self, amount:int) -> bool:
-        return (self.salary - amount) < 100
+        return (self.salary - amount) >= 100
 
-    def is_active(self) -> bool :
+    def is_active(self) -> bool:
         return self.status == Status.ACTIVE
     
     def is_on_leave(self) -> bool :

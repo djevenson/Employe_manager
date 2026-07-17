@@ -66,19 +66,6 @@ class PosgreSQLEmployeeRepo(EmployeeRepo):
                 )
                 employees = cursor.fetchall()
         return [self._from_row(e) for  e in employees] if employees else []
-    
-    def update_post(self, name:str, post:str) -> Optional[Employee]:
-        with self._db_connect() as connection:
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    """UPDATE employees 
-                    SET post=%s WHERE name=%s 
-                    RETURNING *""", 
-                    (post, name)
-                )
-                employee = cursor.fetchone()
-                cursor.commit()
-        return self._from_row(employee) if employee else None
 
     def change_employee_post(self, id:int, post:str) -> Optional[Employee]:
         with self._db_connect() as connection:
@@ -106,27 +93,27 @@ class PosgreSQLEmployeeRepo(EmployeeRepo):
                 connection.commit()
         return self._from_row(employee) if employee else None
 
-    def raise_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
+    def raise_employee_salary(self, id:str, amount:int) -> Optional[Employee]:
         with self._db_connect() as connection:
             with connection.cursor() as cursor:
                 cursor.execute(
                     """UPDATE employees 
                     SET salary = salary+%s 
-                    WHERE name=%s RETURNING *""",
-                (amount, name) 
+                    WHERE id=%s RETURNING *""",
+                (amount, id) 
                 )
                 employee = cursor.fetchone()
                 connection.commit()    
         return self._from_row(employee) if employee else None
 
-    def cut_employee_salary(self, name:str, amount:int) -> Optional[Employee]:
+    def cut_employee_salary(self, id:int, amount:int) -> Optional[Employee]:
         with self._db_connect() as connection:
             with connection.cursor() as cursor:
                 cursor.execute(
                     """UPDATE employees 
                     SET salary = salary-%s 
-                    WHERE name=%s RETURNING * """,
-                    (amount, name)
+                    WHERE id=%s RETURNING * """,
+                    (amount, id)
                 )
                 employee = cursor.fetchone()
                 connection.commit()

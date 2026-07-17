@@ -24,28 +24,31 @@ class PayCutEmployee:
 
     def execute(self, data_input:PayCutEmployeeInput) -> EmployeeOutput:
         employee = self.repository.get_employee(data_input.id)
-        if not employee:
+        if employee is None:
             return EmployeeOutput(
                 message = "Employee not found",
                 employee = None, 
                 status = False
             )
+        
+        if not employee.validate_pay_cut(data_input.amount):
+            return EmployeeOutput(
+                message = f"Cannot cut salary by {data_input.amount}, minimum salary must remain 100", 
+                employee = employee, 
+                status = False
+            )
+        
         if employee.is_laid_off() or employee.is_retired():
             return EmployeeOutput(
                 message = f"Cannot cut-pay an employee who is {employee.status.value}", 
                 employee = employee, 
                 status = False
             )
-        if not employee.validate_pay_cut(data_input.amount):
-            return EmployeeOutput(
-                message = f"Cannot cut salary by {data_input.amount} ", 
-                employee = employee, 
-                status = False
-            )
+
         employee.cut_pay(data_input.amount)
-        employee = self.repository.cut_employee_salary(employee.name, data_input.amount)
+        employee = self.repository.cut_employee_salary(data_input.id, data_input.amount)
         return EmployeeOutput(
-            message = "Employee cutted-pay Successfully", 
+            message = "Employee salary reduced Successfully", 
             employee = employee, 
             status = True
             )

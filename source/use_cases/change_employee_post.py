@@ -29,7 +29,7 @@ class ChangeEmployeePost:
                 employee = None, 
                 status =False
             )
-        if not employee.is_active() or not employee.is_on_leave():
+        if employee.is_laid_off() or employee.is_retired():
             return EmployeeOutput(
                 message = f"Connot change post of an employee who is {employee.status}", 
                 employee = employee, 

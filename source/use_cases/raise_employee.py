@@ -42,9 +42,9 @@ class RaiseEmployee:
                 status = False
             )
         employee.raise_employe(data_input.amount)
-        employee = self.repository.raise_employee_salary(employee.name, data_input.amount)
+        employee = self.repository.raise_employee_salary(employee.id, data_input.amount)
         return EmployeeOutput(
-            message = "Employee raised Successfully", 
+            message = "Employee salary increased successfully", 
             employee = employee, 
             status = True
         )
